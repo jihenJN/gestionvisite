@@ -24,14 +24,41 @@
     <p><strong>Nombre de jours restants :</strong> <?= h($nbreJoursRestant) ?></p>
     <?php endif; ?>
 
+ <div class="container">
+    <div>
    <!-- Display total, completed, and pending visits , response ,delays -->
-    <h6>Total des visites : <?= $totalVisites ?></h6>
+   <h6>Total des visites : <?= $totalVisites ?></h6>
     <h6>Visites Effectués : <?= $completedVisites ?></h6>
     <h6>Visites Non Effectués : <?= $pendingVisites ?></h6>
     <h6>Taux de Retard: <?= number_format($tauxRetard, 2) ?>%</h6>
     <h6>Taux de Reponse: <?= number_format($tauxReponse, 2) ?>%</h6>
+    </div>
+    <div>
+
+    <h6>Type Contacts & Visit Counts</h6>
+    <table >
+        <thead>
+            <tr>
+                <th>Type de Contact</th>
+                <th>Nbre Visites</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($typeContactsData as $row): ?>
+                <tr>
+                    <td><?= h($row['type_contact']) ?></td>
+                    <td><?= h($row['nbre_visites']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    </div>
+ </div>
 
 
+
+
+ 
 
     <div class="table-responsive">
         <table>

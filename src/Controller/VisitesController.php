@@ -94,9 +94,32 @@ class VisitesController extends AppController
          $tauxReponse = ($totalVisites > 0 )? ($completedVisites / $totalVisites) * 100 : 0;
 
 
+        // Fetch the list of TypeContacts
+        $typeContacts = $this->Visites->TypeContacts->find('list', ['limit' => 200])->all();
+
+        // Prepare data: Get visit counts grouped by type_contact_id
+        $typeContactsCounts = $this->Visites->find()
+            ->select(['type_contact_id', 'nbre_visites' => $this->Visites->find()->func()->count('*')])
+            ->group('type_contact_id')
+            ->toArray();
+
+        // Convert counts to an associative array [type_contact_id => nbre_visites]
+        $typeContactsCountsMap = [];
+        foreach ($typeContactsCounts as $row) {
+            $typeContactsCountsMap[$row->type_contact_id] = $row->nbre_visites;
+        }
+
+        // Prepare data array
+        $typeContactsData = [];
+        foreach ($typeContacts as $id => $name) {
+            $typeContactsData[] = [
+                'type_contact' => $name,
+                'nbre_visites' => isset($typeContactsCountsMap[$id]) ? $typeContactsCountsMap[$id] : 0
+            ];
+        }
 
 
-        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites', 'tauxRetard','tauxReponse','nbreJoursRestant'));
+        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites', 'tauxRetard','tauxReponse','nbreJoursRestant','typeContactsData'));
     }
 
     /**
