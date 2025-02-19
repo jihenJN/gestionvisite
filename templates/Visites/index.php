@@ -6,22 +6,27 @@
 ?>
 <div class="visites index content">
     <?= $this->Html->link(__('New Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-      <!-- Display Flash Messages -->
-      <?= $this->Flash->render() ?>
+    
+    <!-- Display Flash Messages -->
+    <?= $this->Flash->render() ?>
     
     <h3><?= __('Visites') ?></h3>
 
-       <!-- Filter Form -->
-<?= $this->Form->create(null, ['type' => 'get']) ?>
-    <div class="filter-form">
-        <?= $this->Form->control('numero', ['label' => 'Search by Number', 'value' => $this->request->getQuery('numero')]) ?>
-        <?= $this->Form->button(__('Search')) ?>
-    </div>
-<?= $this->Form->end() ?>
-   <!-- Display total, completed, and pending visits -->
+    <!-- Filter Form -->
+    <?= $this->Form->create(null, ['type' => 'get']) ?>
+        <div class="filter-form">
+            <?= $this->Form->control('numero', [ 'value' => $this->request->getQuery('numero')]) ?>
+            <?= $this->Form->button(__('Visite N°')) ?>
+        </div>
+    <?= $this->Form->end() ?>
+
+   <!-- Display total, completed, and pending visits , response ,delays -->
     <h6>Total des visites : <?= $totalVisites ?></h6>
     <h6>Visites Effectués : <?= $completedVisites ?></h6>
     <h6>Visites Non Effectués : <?= $pendingVisites ?></h6>
+    <h6>Taux de Retard: <?= number_format($tauxRetard, 2) ?>%</h6>
+    <h6>Taux de Reponse: <?= number_format($tauxReponse, 2) ?>%</h6>
+
 
 
     <div class="table-responsive">

@@ -22,6 +22,8 @@ class VisitesController extends AppController
             'contain' => ['Clients', 'Visiteurs', 'TypeContacts'],
         ];
 
+ 
+        $title = null;
 
 
         // Get the 'numero' query parameter
@@ -31,16 +33,27 @@ class VisitesController extends AppController
         if ($numero) {
             // Filter by exact match on 'numero'
             $visites = $this->Visites->find()
+                ->contain(['Clients', 'Visiteurs', 'TypeContacts'])
                 ->where(['Visites.numero' => $numero]);
+
+         
+
+
+
+
         } else {
             // If no filter, get all visites
-            $visites = $this->Visites->find();
+            $visites = $this->Visites->find()
+            ->contain(['Clients', 'Visiteurs', 'TypeContacts']);
         }
 
         // Check if any visites are found
         if ($visites->isEmpty()) {
             // Set a message if no visites are found for the given 'numero'
             $this->Flash->error(__('There is no visit with number {0}', $numero));
+        } else {
+            // If visites are found, set the title
+            $title = 'Nbre jour(s) Reste pour la visite N° ' . h($numero); 
         }
 
 
@@ -61,7 +74,21 @@ class VisitesController extends AppController
         $pendingVisites = $totalVisites - $completedVisites;
 
 
-        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites'));
+        // Calculate delayed visits (where date_visite is later than date_prevu)
+        $delayedVisites = $this->Visites->find()
+        ->where(['date_visite > date_prevu'])
+        ->count();
+
+        // Calculate Taux de retard
+        $tauxRetard = ($totalVisites > 0) ? ($delayedVisites / $totalVisites) * 100 : 0;
+
+         // Calculate Taux de reponse
+         $tauxReponse = ($totalVisites > 0 )? ($completedVisites / $totalVisites) * 100 : 0;
+
+
+
+
+        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites','title', 'tauxRetard','tauxReponse'));
     }
 
     /**
