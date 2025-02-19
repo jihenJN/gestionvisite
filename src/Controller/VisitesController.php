@@ -22,9 +22,7 @@ class VisitesController extends AppController
             'contain' => ['Clients', 'Visiteurs', 'TypeContacts'],
         ];
 
- 
-        $title = null;
-
+        $nbreJoursRestant =0;
 
         // Get the 'numero' query parameter
         $numero = $this->request->getQuery('numero');
@@ -36,9 +34,19 @@ class VisitesController extends AppController
                 ->contain(['Clients', 'Visiteurs', 'TypeContacts'])
                 ->where(['Visites.numero' => $numero]);
 
-         
+                $visite = $visites->first(); // Get the first visit from the result
 
-
+                if ($visite) {
+                   
+                    $currentDate = new \DateTime();
+                    $datePrevu = $visite->date_prevu ? new \DateTime($visite->date_prevu->toDateString()) : null;
+                    $dateVisite = $visite->date_visite ? new \DateTime($visite->date_visite->toDateString()) : null;
+        
+                    if ($datePrevu && $datePrevu < $currentDate && !$dateVisite) {
+                        $interval = $datePrevu->diff($currentDate);
+                        $nbreJoursRestant = $interval->days;
+                    }
+                }
 
 
         } else {
@@ -88,7 +96,7 @@ class VisitesController extends AppController
 
 
 
-        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites','title', 'tauxRetard','tauxReponse'));
+        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites', 'tauxRetard','tauxReponse','nbreJoursRestant'));
     }
 
     /**

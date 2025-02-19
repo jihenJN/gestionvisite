@@ -20,6 +20,10 @@
         </div>
     <?= $this->Form->end() ?>
 
+    <?php if (isset($nbreJoursRestant)): ?>
+    <p><strong>Nombre de jours restants :</strong> <?= h($nbreJoursRestant) ?></p>
+    <?php endif; ?>
+
    <!-- Display total, completed, and pending visits , response ,delays -->
     <h6>Total des visites : <?= $totalVisites ?></h6>
     <h6>Visites Effectués : <?= $completedVisites ?></h6>
