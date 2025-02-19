@@ -7,6 +7,11 @@
 <div class="visites index content">
     <?= $this->Html->link(__('New Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Visites') ?></h3>
+
+   <!-- Display total, completed, and pending visits -->
+    <h6>Total des visites : <?= $totalVisites ?></h6>
+    <h6>Visites Effectués : <?= $completedVisites ?></h6>
+    <h6>Visites Non Effectués : <?= $pendingVisites ?></h6>
     <div class="table-responsive">
         <table>
             <thead>

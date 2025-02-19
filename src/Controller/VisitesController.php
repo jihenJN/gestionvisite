@@ -21,9 +21,24 @@ class VisitesController extends AppController
         $this->paginate = [
             'contain' => ['Clients', 'Visiteurs', 'TypeContacts'],
         ];
+
+
+        // Fetch the visits data
         $visites = $this->paginate($this->Visites);
 
-        $this->set(compact('visites'));
+        // Calculate total visits
+        $totalVisites = $this->Visites->find()->count();
+
+        // Calculate completed visits (where date_visite is not null)
+        $completedVisites = $this->Visites->find()
+            ->where(['date_visite IS NOT' => null])
+            ->count();
+
+        // Calculate pending visits (where date_visite is null)
+        $pendingVisites = $totalVisites - $completedVisites;
+
+
+        $this->set(compact('visites', 'totalVisites', 'completedVisites', 'pendingVisites'));
     }
 
     /**
