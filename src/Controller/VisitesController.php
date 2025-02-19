@@ -23,8 +23,31 @@ class VisitesController extends AppController
         ];
 
 
-        // Fetch the visits data
-        $visites = $this->paginate($this->Visites);
+
+        // Get the 'numero' query parameter
+        $numero = $this->request->getQuery('numero');
+        
+        // Apply filter if 'numero' is provided
+        if ($numero) {
+            // Filter by exact match on 'numero'
+            $visites = $this->Visites->find()
+                ->where(['Visites.numero' => $numero]);
+        } else {
+            // If no filter, get all visites
+            $visites = $this->Visites->find();
+        }
+
+        // Check if any visites are found
+        if ($visites->isEmpty()) {
+            // Set a message if no visites are found for the given 'numero'
+            $this->Flash->error(__('There is no visit with number {0}', $numero));
+        }
+
+
+    
+        // Apply pagination to the filtered query
+        $visites = $this->paginate($visites);
+
 
         // Calculate total visits
         $totalVisites = $this->Visites->find()->count();
