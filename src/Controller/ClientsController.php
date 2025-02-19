@@ -102,4 +102,35 @@ class ClientsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+
+    public function addAjax()
+    {
+        $this->request->allowMethod(['post']); // Allow only POST requests
+        $this->autoRender = false; // Prevent rendering a view
+        $this->response = $this->response->withType('application/json');
+    
+        $client = $this->Clients->newEmptyEntity();
+        $client = $this->Clients->patchEntity($client, $this->request->getData());
+    
+        if ($this->Clients->save($client)) {
+            return $this->response->withStringBody(json_encode([
+                'status' => 'success',
+                'client' => [
+                    'id' => $client->id ?? null,
+                    'nom' => $client->nom ?? '',
+                    'telephone' => $client->telephone ?? '',
+                    'email' => $client->email ?? ''
+                ]
+            ]));
+        } else {
+            return $this->response->withStringBody(json_encode([
+                'status' => 'error',
+                'errors' => $client->getErrors(),
+                'message' => 'Validation failed'
+            ]));
+        }
+    }
+    
+
 }
