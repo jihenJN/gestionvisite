@@ -209,19 +209,39 @@ class VisitesController extends AppController
     }
 
     public function search()
-    {
-        $this->request->allowMethod(['get']);
-        $searchTerm = $this->request->getQuery('search');
-    
-        $visites = $this->Visites->find()
-            ->contain(['Clients'])
-            ->where(['Clients.nom LIKE' => "%$searchTerm%"])
-            ->limit(10)
-            ->toArray(); // Convert to array for JSON response
-    
-        return $this->response->withType('application/json')
-            ->withStringBody(json_encode($visites));
+{
+    $this->request->allowMethod(['get']);
+
+    // Get search parameters
+    $clientSearch = $this->request->getQuery('client');
+    $visiteurSearch = $this->request->getQuery('visiteur');
+
+    // Build query dynamically
+    $query = $this->Visites->find()
+        ->contain(['Clients', 'Visiteurs']);
+
+    // Apply filters if they exist
+    $conditions = [];
+    if (!empty($clientSearch)) {
+        $conditions['Clients.nom LIKE'] = "%$clientSearch%";
     }
+    if (!empty($visiteurSearch)) {
+        $conditions['Visiteurs.nom LIKE'] = "%$visiteurSearch%";
+    }
+    
+
+    // Apply conditions to query
+    if (!empty($conditions)) {
+        $query->where($conditions);
+    }
+
+    // Fetch results
+    $visites = $query->limit(50)->toArray();
+
+    return $this->response->withType('application/json')
+        ->withStringBody(json_encode($visites));
+}
+
     
 
 }

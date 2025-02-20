@@ -91,8 +91,8 @@
                     <th></th>
                     <th></th>
                     <th></th> <!-- No filter for checkbox -->
-                    <th><input type="text" class="filter" id="search"></th>
-                    <th><input type="text" class="filter"></th>
+                    <th><input type="text" class="filter" id="clientSearch"></th>
+                    <th><input type="text" class="filter" id="visiteurSearch"></th>
                     <th><input type="text" class="filter" data-column="11"></th>
                     <th></th> <!-- No filter for actions -->
                 </tr>
@@ -143,62 +143,54 @@
 
 
 <script>
-$(document).ready(function () {
-    console.log("jQuery is loaded!");
+document.addEventListener("DOMContentLoaded", function() {
+    const inputs = document.querySelectorAll("#clientSearch, #visiteurSearch, #dateVisiteSearch, #lieuSearch");
 
-    $('#search').on('keyup', function () {
-        var query = $(this).val();
-        console.log("Query:", query); // Debug input value
+    inputs.forEach(input => {
+        input.addEventListener("input", debounce(performSearch, 300)); // Debounce function added
+    });
 
-        $.ajax({
-            url: "/visites/search",
-            type: "GET",
-            data: { search: query },
-            dataType: "json", // Expect JSON response
-            success: function (data) {
-                console.log("AJAX Success:", data);
-                
-                var resultsHtml = "";
-                if (data.length > 0) {
-                    data.forEach(function (visite) {
-                        resultsHtml += `
-                            <tr>
-                                <td><?= $this->Number->format($visite->id) ?></td>
-                                <td><?= $this->Number->format($visite->numero) ?></td>
-                                <td><?= h($visite->commentaire) ?></td>
-                                <td><?= h($visite->lieu) ?></td>
-                                <td><?= h($visite->date_demande) ?></td>
-                                <td><?= h($visite->date_prevu) ?></td>
-                                <td><?= h($visite->date_visite) ?></td>
-                                <td><?= h($visite->localisation) ?></td>
-                                <td>
-                                    <?= $this->Form->checkbox('effectue', [
-                                        'checked' => !empty($visite->date_visite), // If date_visite is not empty, effectue will be set to true
-                                        'disabled' => true, // make the checkbox disabled
-                                        'class' => 'effectue-checkbox' // optional, for styling purposes
-                                    ]) ?>
-                               </td>
-                                <td>${visite.client ? visite.client.nom : ''}</td>
-                                <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
-                                <td class="actions">
-                                    <?= $this->Html->link(__('View'), ['action' => 'view', $visite->id]) ?>
-                                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $visite->id]) ?>
-                                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $visite->id], ['confirm' => __('Are you sure you want to delete # {0}?', $visite->id)]) ?>
-                                </td>
-                            </tr>
-                        `;
-                    });
-                } else {
-                    resultsHtml = "<tr><td colspan='10'>Aucun résultat trouvé</td></tr>";
+    function performSearch() {
+        let client = document.getElementById("clientSearch").value;
+        let visiteur = document.getElementById("visiteurSearch").value;
+       
+        let queryParams = new URLSearchParams();
+        if (client) queryParams.append("client", client);
+        if (visiteur) queryParams.append("visiteur", visiteur);
+  
+
+        fetch(`/visites/search?${queryParams.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.getElementById("searchResults");
+                tableBody.innerHTML = ""; // Clear previous results
+
+                if (data.length === 0) {
+                    tableBody.innerHTML = "<tr><td colspan='5'>No results found</td></tr>";
+                    return;
                 }
 
-                $('#searchResults').html(resultsHtml);
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", xhr.status, error);
-            }
-        });
-    });
+                data.forEach(visite => {
+                    let row = `<tr>
+                        <td>${visite.id}</td>
+                        <td>${visite.client ? visite.client.nom : ''}</td>
+                        <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
+                        <td>${visite.date_visite || ''}</td>
+                        <td>${visite.lieu || ''}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            });
+    }
+
+    // Debounce function to prevent too many API calls
+    function debounce(func, delay) {
+        let timer;
+        return function() {
+            clearTimeout(timer);
+            timer = setTimeout(func, delay);
+        };
+    }
 });
 
 </script>
