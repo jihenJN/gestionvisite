@@ -114,8 +114,13 @@ $(document).ready(function () {
             },
             success: function (response) {
                 if (response.status === 'success') {
-                    // Append new client to the dropdown
+                    
+
+                    // Prepend the new client at the top of the dropdown
                     $('#client-id').append(new Option(response.client.nom, response.client.id));
+                    
+                    // Manually set the newly added client as selected
+                    $('#client-id').val(response.client.id).trigger('change');
 
                     // Close modal
                     $('#addClientModal').modal('hide');
@@ -123,8 +128,7 @@ $(document).ready(function () {
                     // Reset form fields
                     $('#addClientForm')[0].reset();
 
-                    // Show success message (optional)
-                    alert('Client added successfully: ' + response.client.nom);
+
                 } else {
                     // Display validation errors
                     let errorMessage = 'Error adding client:\n';
