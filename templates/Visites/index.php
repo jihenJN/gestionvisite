@@ -58,9 +58,9 @@
 
 
 
-    <div class="search-container">
+    <!--div class="search-container">
         <input type="text" id="search" placeholder="Rechercher une visite par client..." class="form-control">
-    </div>
+    </div-->
 
     <div class="table-responsive">
         <table>
@@ -80,6 +80,23 @@
                     <th><?= $this->Paginator->sort('type_contact_id') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
+                <!-- Filter Row -->
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th><input type="text" class="filter" data-column="2"></th>
+                    <th><input type="text" class="filter" data-column="3"></th>
+                    <th><input type="text" class="filter" data-column="4"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th> <!-- No filter for checkbox -->
+                    <th><input type="text" class="filter" id="search"></th>
+                    <th><input type="text" class="filter"></th>
+                    <th><input type="text" class="filter" data-column="11"></th>
+                    <th></th> <!-- No filter for actions -->
+                </tr>
+
             </thead>
             <tbody  id="searchResults">
                 <?php foreach ($visites as $visite): ?>
@@ -146,20 +163,27 @@ $(document).ready(function () {
                     data.forEach(function (visite) {
                         resultsHtml += `
                             <tr>
-                                <td>${visite.id}</td>
-                                <td>${visite.numero}</td>
-                                <td>${visite.commentaire || ''}</td>
-                                <td>${visite.lieu || ''}</td>
-                                <td>${visite.date_demande || ''}</td>
-                                <td>${visite.date_prevu || ''}</td>
-                                <td>${visite.date_visite || ''}</td>
-                                <td>${visite.localisation || ''}</td>
-                                <td>${visite.date_visite ? '✔️' : '❌'}</td>
-                                <td>${visite.client ? visite.client.nom : ''}</td>
+                                <td><?= $this->Number->format($visite->id) ?></td>
+                                <td><?= $this->Number->format($visite->numero) ?></td>
+                                <td><?= h($visite->commentaire) ?></td>
+                                <td><?= h($visite->lieu) ?></td>
+                                <td><?= h($visite->date_demande) ?></td>
+                                <td><?= h($visite->date_prevu) ?></td>
+                                <td><?= h($visite->date_visite) ?></td>
+                                <td><?= h($visite->localisation) ?></td>
                                 <td>
-                                    <a href="/visites/view/${visite.id}">View</a> |
-                                    <a href="/visites/edit/${visite.id}">Edit</a> |
-                                    <a href="/visites/delete/${visite.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <?= $this->Form->checkbox('effectue', [
+                                        'checked' => !empty($visite->date_visite), // If date_visite is not empty, effectue will be set to true
+                                        'disabled' => true, // make the checkbox disabled
+                                        'class' => 'effectue-checkbox' // optional, for styling purposes
+                                    ]) ?>
+                               </td>
+                                <td>${visite.client ? visite.client.nom : ''}</td>
+                                <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
+                                <td class="actions">
+                                    <?= $this->Html->link(__('View'), ['action' => 'view', $visite->id]) ?>
+                                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $visite->id]) ?>
+                                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $visite->id], ['confirm' => __('Are you sure you want to delete # {0}?', $visite->id)]) ?>
                                 </td>
                             </tr>
                         `;
