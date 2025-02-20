@@ -58,7 +58,9 @@
 
 
 
- 
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Rechercher une visite par client..." class="form-control">
+    </div>
 
     <div class="table-responsive">
         <table>
@@ -79,7 +81,7 @@
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody  id="searchResults">
                 <?php foreach ($visites as $visite): ?>
                 <tr>
                     <td><?= $this->Number->format($visite->id) ?></td>
@@ -121,3 +123,60 @@
         <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
     </div>
 </div>
+
+
+<script>
+$(document).ready(function () {
+    console.log("jQuery is loaded!");
+
+    $('#search').on('keyup', function () {
+        var query = $(this).val();
+        console.log("Query:", query); // Debug input value
+
+        $.ajax({
+            url: "/visites/search",
+            type: "GET",
+            data: { search: query },
+            dataType: "json", // Expect JSON response
+            success: function (data) {
+                console.log("AJAX Success:", data);
+                
+                var resultsHtml = "";
+                if (data.length > 0) {
+                    data.forEach(function (visite) {
+                        resultsHtml += `
+                            <tr>
+                                <td>${visite.id}</td>
+                                <td>${visite.numero}</td>
+                                <td>${visite.commentaire || ''}</td>
+                                <td>${visite.lieu || ''}</td>
+                                <td>${visite.date_demande || ''}</td>
+                                <td>${visite.date_prevu || ''}</td>
+                                <td>${visite.date_visite || ''}</td>
+                                <td>${visite.localisation || ''}</td>
+                                <td>${visite.date_visite ? '✔️' : '❌'}</td>
+                                <td>${visite.client ? visite.client.nom : ''}</td>
+                                <td>
+                                    <a href="/visites/view/${visite.id}">View</a> |
+                                    <a href="/visites/edit/${visite.id}">Edit</a> |
+                                    <a href="/visites/delete/${visite.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    resultsHtml = "<tr><td colspan='10'>Aucun résultat trouvé</td></tr>";
+                }
+
+                $('#searchResults').html(resultsHtml);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", xhr.status, error);
+            }
+        });
+    });
+});
+
+</script>
+
+

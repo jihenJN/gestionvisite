@@ -207,4 +207,21 @@ class VisitesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function search()
+    {
+        $this->request->allowMethod(['get']);
+        $searchTerm = $this->request->getQuery('search');
+    
+        $visites = $this->Visites->find()
+            ->contain(['Clients'])
+            ->where(['Clients.nom LIKE' => "%$searchTerm%"])
+            ->limit(10)
+            ->toArray(); // Convert to array for JSON response
+    
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($visites));
+    }
+    
+
 }
