@@ -111,7 +111,7 @@
                     <td><?= h($visite->localisation) ?></td>
                     <td>
                         <?= $this->Form->checkbox('effectue', [
-                            'checked' => !empty($visite->date_visite), // If date_visite is not empty, effectue will be set to true
+                            'checked' => $visite->effectue, // If date_visite is not empty, effectue will be set to true
                             'disabled' => true, // make the checkbox disabled
                             'class' => 'effectue-checkbox' // optional, for styling purposes
                         ]) ?>
