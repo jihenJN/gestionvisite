@@ -84,9 +84,9 @@
                 <tr>
                     <th></th>
                     <th></th>
-                    <th><input type="text" class="filter" data-column="2"></th>
-                    <th><input type="text" class="filter" data-column="3"></th>
-                    <th><input type="text" class="filter" data-column="4"></th>
+                    <th><input type="text" class="filter" id="commentaireSearch"></th>
+                    <th><input type="text" class="filter" id="lieuSearch"></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -144,7 +144,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const inputs = document.querySelectorAll("#clientSearch, #visiteurSearch, #typeContactSearch");
+    const inputs = document.querySelectorAll(" #commentaireSearch,#lieuSearch ,#clientSearch, #visiteurSearch, #typeContactSearch");
 
     inputs.forEach(input => {
         input.addEventListener("input", debounce(performSearch, 300)); // Debounce function added
@@ -154,11 +154,15 @@ document.addEventListener("DOMContentLoaded", function() {
         let client = document.getElementById("clientSearch").value;
         let visiteur = document.getElementById("visiteurSearch").value;
         let type_contact=document.getElementById("typeContactSearch").value;
+        let lieu=document.getElementById("lieuSearch").value;
+        let commentaire=document.getElementById("commentaireSearch").value;
        
         let queryParams = new URLSearchParams();
         if (client) queryParams.append("client", client);
         if (visiteur) queryParams.append("visiteur", visiteur);
         if (type_contact) queryParams.append("type_contact", type_contact);
+        if (lieu) queryParams.append("lieu", lieu);
+        if (commentaire) queryParams.append("commentaire", commentaire);
   
 
         fetch(`/visites/search?${queryParams.toString()}`)
@@ -177,8 +181,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td>${visite.id}</td>
                         <td>${visite.client ? visite.client.nom : ''}</td>
                         <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
-                         <td>${visite.type_contact ? visite.type_contact.libelle : ''}</td>
-                  
+                        <td>${visite.type_contact ? visite.type_contact.libelle : ''}</td>
+                        <td>${visite.lieu}</td>
+                        <td>${visite.commentaire}</td>
                     </tr>`;
                     tableBody.innerHTML += row;
                 });

@@ -216,6 +216,8 @@ class VisitesController extends AppController
     $clientSearch = $this->request->getQuery('client');
     $visiteurSearch = $this->request->getQuery('visiteur');
     $typeContactSearch = $this->request->getQuery('type_contact'); 
+    $lieuSearch = $this->request->getQuery('lieu'); 
+    $commentaireSearch = $this->request->getQuery('commentaire'); 
 
     // Build query dynamically
     $query = $this->Visites->find()
@@ -233,6 +235,15 @@ class VisitesController extends AppController
     if (!empty($typeContactSearch)) {
         $conditions['TypeContacts.libelle LIKE'] = "%$typeContactSearch%";
     }
+
+    if (!empty($lieuSearch)) {
+        $conditions['lieu LIKE'] = "%$lieuSearch%";
+    }
+
+    if (!empty($commentaireSearch)) {
+        $conditions['commentaire LIKE'] = "%$commentaireSearch%";
+    }
+
 
     // Apply conditions to query
     if (!empty($conditions)) {
