@@ -28,7 +28,7 @@
                     echo $this->Form->control('date_prevu', ['empty' => true]);
                     echo $this->Form->control('date_visite', ['empty' => true]);
                     echo $this->Form->control('localisation');
-                    echo $this->Form->control('effectue');
+                  //  echo $this->Form->control('effectue');
                  
                    
                 ?>
