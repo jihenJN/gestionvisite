@@ -24,10 +24,11 @@
                     echo $this->Form->control('numero');
                     echo $this->Form->control('commentaire');
                     echo $this->Form->control('lieu');
-                    echo $this->Form->control('date_demande', ['empty' => true,'max' => date('Y-m-d')]);
-                    echo $this->Form->control('date_prevu', ['empty' => true,'min' => date('Y-m-d')]);
-                    echo $this->Form->control('date_visite', ['empty' => true,'max' => date('Y-m-d')]); // Restricts future dates
+                    echo $this->Form->control('date_demande', ['empty' => true]);
+                    echo $this->Form->control('date_prevu', ['empty' => true]);
+                    echo $this->Form->control('date_visite', ['empty' => true]); // Restricts future dates
                     echo $this->Form->control('localisation');
+                    echo $this->Form->control('effectue');
                 ?>
                   
                 <!-- Client dropdown and "Add New Client" button in grid layout -->

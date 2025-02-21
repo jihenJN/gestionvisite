@@ -154,6 +154,13 @@ class VisitesController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The visite could not be saved. Please, try again.'));
+
+              // You can log the errors to debug them
+              debug($visite->getErrors()); // This will show validation errors
+            
+              // Alternatively, log them to CakePHP's log file
+              Log::error('Visite Save Failed: ' . print_r($visite->getErrors(), true));
+              
         }
         $clients = $this->Visites->Clients->find('list', ['limit' => 200])->all();
         $visiteurs = $this->Visites->Visiteurs->find('list', ['limit' => 200])->all();
