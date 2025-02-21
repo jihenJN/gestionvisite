@@ -151,44 +151,72 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function performSearch() {
-        let client = document.getElementById("clientSearch").value;
-        let visiteur = document.getElementById("visiteurSearch").value;
-        let type_contact=document.getElementById("typeContactSearch").value;
-        let lieu=document.getElementById("lieuSearch").value;
-        let commentaire=document.getElementById("commentaireSearch").value;
-       
-        let queryParams = new URLSearchParams();
-        if (client) queryParams.append("client", client);
-        if (visiteur) queryParams.append("visiteur", visiteur);
-        if (type_contact) queryParams.append("type_contact", type_contact);
-        if (lieu) queryParams.append("lieu", lieu);
-        if (commentaire) queryParams.append("commentaire", commentaire);
-  
+    let client = document.getElementById("clientSearch").value;
+    let visiteur = document.getElementById("visiteurSearch").value;
+    let type_contact = document.getElementById("typeContactSearch").value;
+    let lieu = document.getElementById("lieuSearch").value;
+    let commentaire = document.getElementById("commentaireSearch").value;
 
-        fetch(`/visites/search?${queryParams.toString()}`)
-            .then(response => response.json())
-            .then(data => {
-                let tableBody = document.getElementById("searchResults");
-                tableBody.innerHTML = ""; // Clear previous results
+    let queryParams = new URLSearchParams();
+    if (client) queryParams.append("client", client);
+    if (visiteur) queryParams.append("visiteur", visiteur);
+    if (type_contact) queryParams.append("type_contact", type_contact);
+    if (lieu) queryParams.append("lieu", lieu);
+    if (commentaire) queryParams.append("commentaire", commentaire);
 
-                if (data.length === 0) {
-                    tableBody.innerHTML = "<tr><td colspan='5'>No results found</td></tr>";
-                    return;
-                }
+    fetch(`/visites/search?${queryParams.toString()}`, {
+        headers: {
+            "X-CSRF-Token": document.querySelector('meta[name="csrfToken"]').getAttribute("content")
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        let tableBody = document.getElementById("searchResults");
+        tableBody.innerHTML = ""; // Clear previous results
 
-                data.forEach(visite => {
-                    let row = `<tr>
-                        <td>${visite.id}</td>
-                        <td>${visite.client ? visite.client.nom : ''}</td>
-                        <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
-                        <td>${visite.type_contact ? visite.type_contact.libelle : ''}</td>
-                        <td>${visite.lieu}</td>
-                        <td>${visite.commentaire}</td>
-                    </tr>`;
-                    tableBody.innerHTML += row;
-                });
-            });
-    }
+        if (data.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='13'>No results found</td></tr>";
+            return;
+        }
+
+        data.forEach(visite => {
+            let deleteLink = `
+                <form method="post" action="/visites/delete/${visite.id}" onsubmit="return confirmDelete(${visite.id});">
+                    <input type="hidden" name="_csrfToken" value="${document.querySelector('meta[name="csrfToken"]').getAttribute("content")}">
+                    <a href="#" onclick="this.parentNode.submit(); return false;" class="delete-link">Delete</a>
+                </form>`;
+
+            let row = `<tr>
+                <td>${visite.id}</td>
+                <td>${visite.numero}</td>
+                <td>${visite.commentaire}</td>
+                <td>${visite.lieu}</td>
+                <td>${visite.date_demande}</td>
+                <td>${visite.date_prevu}</td>
+                <td>${visite.date_visite}</td>
+                <td>${visite.localisation}</td>
+                <td>
+                    <input type="checkbox" ${visite.date_visite ? "checked" : ""} disabled>
+                </td>
+                <td>${visite.client ? `<a href="/clients/view/${visite.client.id}">${visite.client.nom}</a>` : ''}</td>
+                <td>${visite.visiteur ? `<a href="/visiteurs/view/${visite.visiteur.id}">${visite.visiteur.nom}</a>` : ''}</td>
+                <td>${visite.type_contact ? `<a href="/type_contacts/view/${visite.type_contact.id}">${visite.type_contact.libelle}</a>` : ''}</td>
+                <td class="actions">
+                    <a href="/visites/view/${visite.id}">View</a>
+                    <a href="/visites/edit/${visite.id}">Edit</a>
+                    ${deleteLink}
+                </td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    });
+}
+
+// Function to confirm delete action
+function confirmDelete(id) {
+    return confirm(`Are you sure you want to delete #${id}?`);
+}
+
 
     // Debounce function to prevent too many API calls
     function debounce(func, delay) {
