@@ -93,7 +93,7 @@
                     <th></th> <!-- No filter for checkbox -->
                     <th><input type="text" class="filter" id="clientSearch"></th>
                     <th><input type="text" class="filter" id="visiteurSearch"></th>
-                    <th><input type="text" class="filter" data-column="11"></th>
+                    <th><input type="text" class="filter" id="typeContactSearch"></th>
                     <th></th> <!-- No filter for actions -->
                 </tr>
 
@@ -144,7 +144,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const inputs = document.querySelectorAll("#clientSearch, #visiteurSearch, #dateVisiteSearch, #lieuSearch");
+    const inputs = document.querySelectorAll("#clientSearch, #visiteurSearch, #typeContactSearch");
 
     inputs.forEach(input => {
         input.addEventListener("input", debounce(performSearch, 300)); // Debounce function added
@@ -153,10 +153,12 @@ document.addEventListener("DOMContentLoaded", function() {
     function performSearch() {
         let client = document.getElementById("clientSearch").value;
         let visiteur = document.getElementById("visiteurSearch").value;
+        let type_contact=document.getElementById("typeContactSearch").value;
        
         let queryParams = new URLSearchParams();
         if (client) queryParams.append("client", client);
         if (visiteur) queryParams.append("visiteur", visiteur);
+        if (type_contact) queryParams.append("type_contact", type_contact);
   
 
         fetch(`/visites/search?${queryParams.toString()}`)
@@ -175,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         <td>${visite.id}</td>
                         <td>${visite.client ? visite.client.nom : ''}</td>
                         <td>${visite.visiteur ? visite.visiteur.nom : ''}</td>
-                        <td>${visite.date_visite || ''}</td>
-                        <td>${visite.lieu || ''}</td>
+                         <td>${visite.type_contact ? visite.type_contact.libelle : ''}</td>
+                  
                     </tr>`;
                     tableBody.innerHTML += row;
                 });

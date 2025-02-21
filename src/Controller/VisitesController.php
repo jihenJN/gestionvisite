@@ -215,10 +215,11 @@ class VisitesController extends AppController
     // Get search parameters
     $clientSearch = $this->request->getQuery('client');
     $visiteurSearch = $this->request->getQuery('visiteur');
+    $typeContactSearch = $this->request->getQuery('type_contact'); 
 
     // Build query dynamically
     $query = $this->Visites->find()
-        ->contain(['Clients', 'Visiteurs']);
+        ->contain(['Clients', 'Visiteurs', 'TypeContacts']);
 
     // Apply filters if they exist
     $conditions = [];
@@ -229,6 +230,9 @@ class VisitesController extends AppController
         $conditions['Visiteurs.nom LIKE'] = "%$visiteurSearch%";
     }
     
+    if (!empty($typeContactSearch)) {
+        $conditions['TypeContacts.libelle LIKE'] = "%$typeContactSearch%";
+    }
 
     // Apply conditions to query
     if (!empty($conditions)) {
