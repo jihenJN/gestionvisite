@@ -71,9 +71,9 @@
 
  
     <div class="table-responsive">
-        <table>
+        <table  class="table">
             <thead>
-                <tr>
+                <tr class="table-dark">
                    
                     <th><?= $this->Paginator->sort('numero') ?></th>
                     <th><?= $this->Paginator->sort('commentaire') ?></th>

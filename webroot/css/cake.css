@@ -1,7 +1,8 @@
 /* Miligram overrides */
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: 400;
+    font-weight: 600;
+    font-size: 1.2rem !important ;
 }
 
 .top-nav-links,
@@ -15,16 +16,17 @@ h1, h2, h3, h4, h5, h6 {
     color: #363637;
 }
 
-a {
-    color:#2f85ae;
+thead a {
+    color:#ffffff  !important;
     -webkit-transition:all 0.2s linear;
     transition:all 0.2s linear;
+    text-decoration: none !important ;
 }
 
 a:hover,
 a:focus,
 a:active  {
-    color:#2a6496;
+    color:#c5150b  !important;
     -webkit-transition:all 0.2s easeout;
     transition:all 0.2s ease-out;
 }
