@@ -4,69 +4,77 @@
  * @var iterable<\App\Model\Entity\Visite> $visites
  */
 ?>
-<div class="visites index content">
-    <?= $this->Html->link(__('New Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    
-    <!-- Display Flash Messages -->
-    <?= $this->Flash->render() ?>
-    
-    <h3><?= __('Visites') ?></h3>
 
-    <!-- Filter Form -->
-    <?= $this->Form->create(null, ['type' => 'get']) ?>
-        <div class="filter-form">
-            <?= $this->Form->control('numero', [ 'value' => $this->request->getQuery('numero')]) ?>
-            <?= $this->Form->button(__('Visite N°')) ?>
-        </div>
-    <?= $this->Form->end() ?>
-
-    <?php if (isset($nbreJoursRestant)): ?>
-    <p><strong>Nombre de jours restants :</strong> <?= h($nbreJoursRestant) ?></p>
-    <?php endif; ?>
-
- <div class="container">
-    <div>
-   <!-- Display total, completed, and pending visits , response ,delays -->
-   <h6>Total des visites : <?= $totalVisites ?></h6>
-    <h6>Visites Effectués : <?= $completedVisites ?></h6>
-    <h6>Visites Non Effectués : <?= $pendingVisites ?></h6>
-    <h6>Taux de Retard: <?= number_format($tauxRetard, 2) ?>%</h6>
-    <h6>Taux de Reponse: <?= number_format($tauxReponse, 2) ?>%</h6>
+<div>
+<div style="display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+    <!-- Statistics Section -->
+    <div style="flex: 1; min-width: 250px; background: #ffffff; margin:15px 10px; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <p><strong>Total des visites :</strong> <?= $totalVisites ?></p>
+        <p><strong>Visites Effectuées :</strong> <?= $completedVisites ?></p>
+        <p><strong>Visites Non Effectuées :</strong> <?= $pendingVisites ?></p>
+        <p><strong>Taux de Retard :</strong> <?= number_format($tauxRetard, 2) ?>%</p>
+        <p><strong>Taux de Réponse :</strong> <?= number_format($tauxReponse, 2) ?>%</p>
     </div>
-    <div>
 
-    <h6>Type Contacts & Visit Counts</h6>
-    <table >
-        <thead>
-            <tr>
-                <th>Type de Contact</th>
-                <th>Nbre Visites</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($typeContactsData as $row): ?>
-                <tr>
-                    <td><?= h($row['type_contact']) ?></td>
-                    <td><?= h($row['nbre_visites']) ?></td>
+    <!-- Contacts Table Section -->
+    <div style="flex: 2; min-width: 400px;background: #ffffff;margin:15px 10px; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #d33c43; color: white;">
+                    <th style="padding: 8px; text-align: left;">Type de Contact</th>
+                    <th style="padding: 8px; text-align: left;">Nbre Visites</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($typeContactsData as $row): ?>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 8px;"><?= h($row['type_contact']) ?></td>
+                        <td style="padding: 8px;"><?= h($row['nbre_visites']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
- </div>
+</div>
+</div>
+<div class="visites index content">
+<!-- Filter Form -->
+<?= $this->Form->create(null, ['type' => 'get']) ?>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex">
+            <!-- Input Field with placeholder -->
+            <?= $this->Form->control('numero', [
+                'value' => $this->request->getQuery('numero'),
+                'placeholder' => __('Rechercher par Numéro'),
+                'class' => 'form-control',
+                'label' => false, // Hide label
+                'style' => 'width: auto;' // Optional: to adjust width if needed
+            ]) ?>
+
+            <!-- Button with loop icon -->
+            <button type="submit" class="btn btn-dark ml-2">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+
+        <!-- New Visite button aligned to the right -->
+        <?= $this->Html->link(__('New Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?> 
+    </div>
+<?= $this->Form->end() ?>
+
+
+<?php if (isset($nbreJoursRestant)): ?>
+    <p><strong>Nombre de jours restants :</strong> <?= h($nbreJoursRestant) ?></p>
+<?php endif; ?>
 
 
 
-
-    <!--div class="search-container">
-        <input type="text" id="search" placeholder="Rechercher une visite par client..." class="form-control">
-    </div-->
-
+ 
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                   
                     <th><?= $this->Paginator->sort('numero') ?></th>
                     <th><?= $this->Paginator->sort('commentaire') ?></th>
                     <th><?= $this->Paginator->sort('lieu') ?></th>
@@ -82,7 +90,7 @@
                 </tr>
                 <!-- Filter Row -->
                 <tr>
-                    <th></th>
+                   
                     <th></th>
                     <th><input type="text" class="filter" id="commentaireSearch"></th>
                     <th><input type="text" class="filter" id="lieuSearch"></th>
@@ -101,7 +109,6 @@
             <tbody  id="searchResults">
                 <?php foreach ($visites as $visite): ?>
                 <tr>
-                    <td><?= $this->Number->format($visite->id) ?></td>
                     <td><?= $this->Number->format($visite->numero) ?></td>
                     <td><?= h($visite->commentaire) ?></td>
                     <td><?= h($visite->lieu) ?></td>
