@@ -42,7 +42,7 @@ class VisitesController extends AppController
                     $datePrevu = $visite->date_prevu ? new \DateTime($visite->date_prevu->toDateString()) : null;
                     $dateVisite = $visite->date_visite ? new \DateTime($visite->date_visite->toDateString()) : null;
         
-                    if ($datePrevu && $datePrevu < $currentDate && !$dateVisite) {
+                    if ($datePrevu && $datePrevu >$currentDate && !$dateVisite) {
                         $interval = $datePrevu->diff($currentDate);
                         $nbreJoursRestant = $interval->days;
                     }
