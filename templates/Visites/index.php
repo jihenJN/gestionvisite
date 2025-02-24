@@ -68,7 +68,6 @@
 <?php endif; ?>
 
 
-
  
     <div class="table-responsive">
         <table  class="table">
@@ -194,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </form>`;
 
             let row = `<tr>
-                <td>${visite.id}</td>
+             
                 <td>${visite.numero}</td>
                 <td>${visite.commentaire}</td>
                 <td>${visite.lieu}</td>

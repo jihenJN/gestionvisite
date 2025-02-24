@@ -16,8 +16,8 @@ h1, h2, h3, h4, h5, h6 {
     color: #363637;
 }
 
-thead a {
-    color:#ffffff  !important;
+ a {
+    color:#2f85ae;
     -webkit-transition:all 0.2s linear;
     transition:all 0.2s linear;
     text-decoration: none !important ;
@@ -26,7 +26,7 @@ thead a {
 a:hover,
 a:focus,
 a:active  {
-    color:#c5150b  !important;
+    color:#2a6496;
     -webkit-transition:all 0.2s easeout;
     transition:all 0.2s ease-out;
 }
@@ -224,3 +224,4 @@ th {
         content: " \2190";
     }
 }
+
