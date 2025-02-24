@@ -225,6 +225,7 @@ class VisitesController extends AppController
     $typeContactSearch = $this->request->getQuery('type_contact'); 
     $lieuSearch = $this->request->getQuery('lieu'); 
     $commentaireSearch = $this->request->getQuery('commentaire'); 
+    $effectueSearch= $this->request->getQuery('effectue');
 
     // Build query dynamically
     $query = $this->Visites->find()
@@ -251,6 +252,10 @@ class VisitesController extends AppController
         $conditions['commentaire LIKE'] = "%$commentaireSearch%";
     }
 
+    if ($effectueSearch !== null && in_array($effectueSearch, ['0', '1'], true)) {
+        $conditions['effectue'] = (bool)$effectueSearch;
+    }
+
 
     // Apply conditions to query
     if (!empty($conditions)) {
@@ -259,6 +264,8 @@ class VisitesController extends AppController
 
     // Fetch results
     $visites = $query->limit(50)->toArray();
+
+   
 
     return $this->response->withType('application/json')
         ->withStringBody(json_encode($visites));

@@ -97,7 +97,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th></th> <!-- No filter for checkbox -->
+                    <th><input type="text" class="filter" placeholder ="0/1" id="effectueSearch"></th>
                     <th><input type="text" class="filter" id="clientSearch"></th>
                     <th><input type="text" class="filter" id="visiteurSearch"></th>
                     <th><input type="text" class="filter" id="typeContactSearch"></th>
@@ -150,18 +150,23 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const inputs = document.querySelectorAll(" #commentaireSearch,#lieuSearch ,#clientSearch, #visiteurSearch, #typeContactSearch");
+ 
+    const inputs = document.querySelectorAll(" #effectueSearch,#commentaireSearch,#lieuSearch ,#clientSearch, #visiteurSearch, #typeContactSearch");
 
     inputs.forEach(input => {
+        console.log("Adding input listener to:", input.id); // Log each input being processed
         input.addEventListener("input", debounce(performSearch, 300)); // Debounce function added
     });
 
     function performSearch() {
+        console.log("Page loaded, script is running");
     let client = document.getElementById("clientSearch").value;
     let visiteur = document.getElementById("visiteurSearch").value;
     let type_contact = document.getElementById("typeContactSearch").value;
     let lieu = document.getElementById("lieuSearch").value;
     let commentaire = document.getElementById("commentaireSearch").value;
+    let effectue = document.getElementById("effectueSearch").value;  
+    console.log('effectue ',effectue )
 
     let queryParams = new URLSearchParams();
     if (client) queryParams.append("client", client);
@@ -169,6 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (type_contact) queryParams.append("type_contact", type_contact);
     if (lieu) queryParams.append("lieu", lieu);
     if (commentaire) queryParams.append("commentaire", commentaire);
+    if (effectue) queryParams.append("effectue", effectue);
 
     fetch(`/visites/search?${queryParams.toString()}`, {
         headers: {
@@ -202,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <td>${visite.date_visite}</td>
                 <td>${visite.localisation}</td>
                 <td>
-                    <input type="checkbox" ${visite.date_visite ? "checked" : ""} disabled>
+                    <input type="checkbox" ${visite.effectue ? "checked" : ""} disabled>
                 </td>
                 <td>${visite.client ? `<a href="/clients/view/${visite.client.id}">${visite.client.nom}</a>` : ''}</td>
                 <td>${visite.visiteur ? `<a href="/visiteurs/view/${visite.visiteur.id}">${visite.visiteur.nom}</a>` : ''}</td>
