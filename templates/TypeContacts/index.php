@@ -11,7 +11,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                    
                     <th><?= $this->Paginator->sort('libelle') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
@@ -19,7 +19,7 @@
             <tbody>
                 <?php foreach ($typeContacts as $typeContact): ?>
                 <tr>
-                    <td><?= $this->Number->format($typeContact->id) ?></td>
+                    
                     <td><?= h($typeContact->libelle) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $typeContact->id]) ?>

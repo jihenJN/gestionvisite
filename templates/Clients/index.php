@@ -11,7 +11,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                    
                     <th><?= $this->Paginator->sort('nom') ?></th>
                     <th><?= $this->Paginator->sort('telephone') ?></th>
                     <th><?= $this->Paginator->sort('email') ?></th>
@@ -21,7 +21,7 @@
             <tbody>
                 <?php foreach ($clients as $client): ?>
                 <tr>
-                    <td><?= $this->Number->format($client->id) ?></td>
+                  
                     <td><?= h($client->nom) ?></td>
                     <td><?= h($client->telephone) ?></td>
                     <td><?= h($client->email) ?></td>

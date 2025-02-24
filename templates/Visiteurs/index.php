@@ -11,7 +11,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
+                  
                     <th><?= $this->Paginator->sort('nom') ?></th>
                     <th><?= $this->Paginator->sort('telephone') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
@@ -20,7 +20,7 @@
             <tbody>
                 <?php foreach ($visiteurs as $visiteur): ?>
                 <tr>
-                    <td><?= $this->Number->format($visiteur->id) ?></td>
+                 
                     <td><?= h($visiteur->nom) ?></td>
                     <td><?= h($visiteur->telephone) ?></td>
                     <td class="actions">
