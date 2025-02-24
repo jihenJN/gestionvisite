@@ -58,7 +58,7 @@
         </div>
 
         <!-- New Visite button aligned to the right -->
-        <?= $this->Html->link(__('New Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?> 
+        <?= $this->Html->link(__('Nouvelle Visite'), ['action' => 'add'], ['class' => 'button float-right']) ?> 
     </div>
 <?= $this->Form->end() ?>
 

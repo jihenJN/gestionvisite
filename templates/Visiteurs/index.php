@@ -5,7 +5,7 @@
  */
 ?>
 <div class="visiteurs index content">
-    <?= $this->Html->link(__('New Visiteur'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('Nouveau Visiteur'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Visiteurs') ?></h3>
     <div class="table-responsive">
         <table>

@@ -5,7 +5,7 @@
  */
 ?>
 <div class="typeContacts index content">
-    <?= $this->Html->link(__('New Type Contact'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('Nouveau Type de Contact'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <h3><?= __('Type Contacts') ?></h3>
     <div class="table-responsive">
         <table>

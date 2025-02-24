@@ -30,18 +30,15 @@
                     <th><?= __('Email') ?></th>
                     <td><?= h($client->email) ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($client->id) ?></td>
-                </tr>
+                
             </table>
             <div class="related">
-                <h4><?= __('Related Visites') ?></h4>
+                <h4><?= __('Visites Associées') ?></h4>
                 <?php if (!empty($client->visites)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
+                            
                             <th><?= __('Numero') ?></th>
                             <th><?= __('Commentaire') ?></th>
                             <th><?= __('Lieu') ?></th>
@@ -57,7 +54,7 @@
                         </tr>
                         <?php foreach ($client->visites as $visites) : ?>
                         <tr>
-                            <td><?= h($visites->id) ?></td>
+                           
                             <td><?= h($visites->numero) ?></td>
                             <td><?= h($visites->commentaire) ?></td>
                             <td><?= h($visites->lieu) ?></td>

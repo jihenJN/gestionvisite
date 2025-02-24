@@ -22,18 +22,15 @@
                     <th><?= __('Libelle') ?></th>
                     <td><?= h($typeContact->libelle) ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($typeContact->id) ?></td>
-                </tr>
+               
             </table>
             <div class="related">
-                <h4><?= __('Related Visites') ?></h4>
+                <h4><?= __('Visites Associées') ?></h4>
                 <?php if (!empty($typeContact->visites)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
+                            
                             <th><?= __('Numero') ?></th>
                             <th><?= __('Commentaire') ?></th>
                             <th><?= __('Lieu') ?></th>
@@ -49,7 +46,7 @@
                         </tr>
                         <?php foreach ($typeContact->visites as $visites) : ?>
                         <tr>
-                            <td><?= h($visites->id) ?></td>
+                          
                             <td><?= h($visites->numero) ?></td>
                             <td><?= h($visites->commentaire) ?></td>
                             <td><?= h($visites->lieu) ?></td>

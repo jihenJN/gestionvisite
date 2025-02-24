@@ -26,18 +26,15 @@
                     <th><?= __('Telephone') ?></th>
                     <td><?= h($visiteur->telephone) ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($visiteur->id) ?></td>
-                </tr>
+                
             </table>
             <div class="related">
-                <h4><?= __('Related Visites') ?></h4>
+                <h4><?= __('Visites Associées') ?></h4>
                 <?php if (!empty($visiteur->visites)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
+                            
                             <th><?= __('Numero') ?></th>
                             <th><?= __('Commentaire') ?></th>
                             <th><?= __('Lieu') ?></th>

@@ -42,10 +42,7 @@
                     <th><?= __('Type Contact') ?></th>
                     <td><?= $visite->has('type_contact') ? $this->Html->link($visite->type_contact->libelle, ['controller' => 'TypeContacts', 'action' => 'view', $visite->type_contact->id]) : '' ?></td>
                 </tr>
-                <tr>
-                    <th><?= __('Id') ?></th>
-                    <td><?= $this->Number->format($visite->id) ?></td>
-                </tr>
+                
                 <tr>
                     <th><?= __('Numero') ?></th>
                     <td><?= $this->Number->format($visite->numero) ?></td>
